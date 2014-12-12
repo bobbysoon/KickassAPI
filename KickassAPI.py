@@ -60,12 +60,14 @@ class Torrent(namedtuple("Torrent", ["name", "author", "verified_author",
         print "%s by %s, size: %s, uploaded %s ago" % (self.name, self.author,
                                                        self.size, self.age)
 
+    """
+    Return list of (filename,size)
+    """
     def get_files(self):
         return map(self._get_file, self._get_files())
     def _get_files(self):
         pq = PyQuery(url=self.torrent_link)
         rows = pq("table.torrentFileList").find("tr")
-        print 'rows:',rows
         return map(rows.eq, range(rows.size()))
     def _get_file(self, row):
         name = row("td.torFileName").text()
